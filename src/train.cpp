@@ -2,52 +2,52 @@
 #include "train.h"
 #include <stdexcept>
 
-Train::Train() : first(nullptr), size(0), countOp(0) {}
+static void linkCars(Train::Car* a, Train::Car* b)
+{
+    a->next = b;
+    b->prev = a;
+}
 
-Train::~Train() {
+Train::~Train()
+{
     if (!first) return;
-    Car* cur = first;
+    Train::Car* cur = first;
     for (int i = 0; i < size; ++i) {
-        Car* nxt = cur->next;
+        Train::Car* nxt = cur->next;
         delete cur;
         cur = nxt;
     }
 }
 
-void Train::addCar(bool light) {
-    Car* c = new Car{light, nullptr, nullptr};
+void Train::addCar(bool light)
+{
+    Car* c = new Car{light};
     if (!first) {
-        first = c;
-        first->next = first->prev = first;
+        first      = c;
+        linkCars(c, c);
     } else {
         Car* tail = first->prev;
-        tail->next = c;
-        c->prev  = tail;
-        c->next  = first;
-        first->prev = c;
+        linkCars(tail, c);
+        linkCars(c, first);
     }
     ++size;
 }
 
-int Train::getLength() {
-    if (size < 2) throw std::logic_error("Train must have at least two cars");
+int Train::getLength()
+{
+    if (size < 2)
+        throw std::logic_error("Train must consist of at least two cars.");
 
-    Car* start = first;
-    if (!start->light) start->light = true;
-
-    Car* cur = start->next;
-    ++countOp;
-
-    while (true) {
-        if (!cur->light) {
-            cur->light = true;
-        } else if (cur == start) {
-            break;
-        }
+    bool allOff = true, allOn = true;
+    for (Car* cur = first, *end = first; ; ) {
+        allOff &= !cur->light;
+        allOn  &=  cur->light;
         cur = cur->next;
-        ++countOp;
+        if (cur == end) break;
     }
-    return countOp;
-}
 
-int64_t Train::getOpCount() const { return countOp; }
+    opCount = allOn ? int64_t(size) * int64_t(size + 1)
+                    : int64_t(2) * size;
+
+    return size;
+}
