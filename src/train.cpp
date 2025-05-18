@@ -36,8 +36,9 @@ int Train::getLength() {
         if (cur == end) break;
     }
 
-    opCount = allOn ? static_cast<int64_t>(size) * static_cast<int64_t>(size + 1)
-                    : static_cast<int64_t>(2) * size;
+    int64_t n = static_cast<int64_t>(size);
+    opCount = allOn ? n * (n + 1)
+                    : 2 * n;
 
     return size;
 }
