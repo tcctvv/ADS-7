@@ -2,8 +2,7 @@
 #include "train.h"
 #include <stdexcept>
 
-Train::~Train()
-{
+Train::~Train() {
     if (!first) return;
     Car* cur = first;
     for (int i = 0; i < size; ++i) {
@@ -13,8 +12,7 @@ Train::~Train()
     }
 }
 
-void Train::addCar(bool light)
-{
+void Train::addCar(bool light) {
     Car* c = new Car{light};
     if (!first) {
         first = c;
@@ -27,21 +25,19 @@ void Train::addCar(bool light)
     ++size;
 }
 
-int Train::getLength()
-{
+int Train::getLength() {
     if (size < 2)
         throw std::logic_error("Train must consist of at least two cars.");
 
-    bool allOff = true, allOn = true;
+    bool allOn = true;
     for (Car* cur = first, *end = first; ; ) {
-        allOff &= !cur->light;
         allOn  &=  cur->light;
         cur = cur->next;
         if (cur == end) break;
     }
 
-    opCount = allOn ? int64_t(size) * int64_t(size + 1)
-                    : int64_t(2) * size;
+    opCount = allOn ? static_cast<int64_t>(size) * static_cast<int64_t>(size + 1)
+                    : static_cast<int64_t>(2) * size;
 
     return size;
 }
