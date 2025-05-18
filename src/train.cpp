@@ -2,7 +2,7 @@
 #include "train.h"
 #include <stdexcept>
 
-Train::Train() : first(nullptr), size(0), COP(0) {}
+Train::Train() : first(nullptr), size(0), countOp(0) {}
 
 Train::~Train() {
     if (!first) return;
@@ -32,12 +32,11 @@ void Train::addCar(bool light) {
 int Train::getLength() {
     if (size < 2) throw std::logic_error("Train must have at least two cars");
 
-    // наивный алгоритм
     Car* start = first;
     if (!start->light) start->light = true;
 
     Car* cur = start->next;
-    ++COP;
+    ++countOp;
 
     while (true) {
         if (!cur->light) {
@@ -46,9 +45,9 @@ int Train::getLength() {
             break;
         }
         cur = cur->next;
-        ++COP;
+        ++countOp;
     }
-    return COP;
+    return countOp;
 }
 
-long Train::getOpCount() const { return COP; }
+int64_t Train::getOpCount() const { return countOp; }
