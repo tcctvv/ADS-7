@@ -2,18 +2,12 @@
 #include "train.h"
 #include <stdexcept>
 
-static void linkCars(Train::Car* a, Train::Car* b)
-{
-    a->next = b;
-    b->prev = a;
-}
-
 Train::~Train()
 {
     if (!first) return;
-    Train::Car* cur = first;
+    Car* cur = first;
     for (int i = 0; i < size; ++i) {
-        Train::Car* nxt = cur->next;
+        Car* nxt = cur->next;
         delete cur;
         cur = nxt;
     }
@@ -23,7 +17,7 @@ void Train::addCar(bool light)
 {
     Car* c = new Car{light};
     if (!first) {
-        first      = c;
+        first = c;
         linkCars(c, c);
     } else {
         Car* tail = first->prev;
