@@ -5,7 +5,7 @@
 #include <cstdint>
 
 class Train {
-private:
+ private:
     struct Car {
         bool light{};
         Car* next{};
@@ -19,7 +19,7 @@ private:
     static void linkCars(Car* a, Car* b)
     { a->next = b;  b->prev = a; }
 
-public:
+ public:
     Train() = default;
     ~Train();
 
