@@ -12,12 +12,15 @@ private:
         Car* prev{};
     };
 
-    Car*      first{nullptr};
-    int       size{0};
-    int64_t   opCount{0};
+    Car*    first{nullptr};
+    int     size{0};
+    int64_t opCount{0};
+
+    static void linkCars(Car* a, Car* b)
+    { a->next = b;  b->prev = a; }
 
 public:
-    Train()  = default;
+    Train() = default;
     ~Train();
 
     void   addCar(bool light);
